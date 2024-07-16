@@ -40,35 +40,33 @@ High-ho silver, away
 Play again
 Whoo!"""
 
+# This variable contains symbols to remove that may appear in song lyrics
 remove_chars = [';',':','!',"*","(",")",","]
 
+# This function creates a sorted list of words and thier word counts
 def count_lyrics(song):
     word_list = []
+
+    # These 'for' loops iterate through the lyrics, removing symbols and splitting on whitespace
     for i in remove_chars:
         song = song.replace(i,'')
     for words in song.split():
         word_list.append(words)
     
+    # This 'for' loop creates the unique word list
     unique_words_list = []
     for word in word_list:
-        if word not in unique_words_list:
-            unique_words_list.append(word)
+        if sum(x.count(word) for x in unique_words_list) == 0:
+            word_count = word_list.count(word)
+            unique_words_list.append([word,word_count])
+    
+    # The following sorts the list in reverse order based on the word count
+    sorted_list = sorted(unique_words_list, key = lambda x: (x[1]),reverse=True)
 
-    unique_words_count = []
-    for i in unique_words_list:
-        unique_words_count.append(word_list.count(i))
-    
-    combined_list = []
-    iteration = 0
-    while iteration < len(unique_words_list):
-        combined_list.append((unique_words_list[iteration],unique_words_count[iteration]))
-        iteration += 1
-    
-    sorted_list = sorted(combined_list, key = lambda x: (x[1]),reverse=True)
+    # Next, we print the outcome of the sorted list in a structured manner
     print("Here are the word counts from the song provided:")
     for values in sorted_list:
-        print(values[0],": ",values[1],",")
+        print(values[0]+":",values[1])
 
-
-
+# Call the function
 count_lyrics(song)
